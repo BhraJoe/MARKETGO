@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Your cart | MarketGo{% endblock %}
+{% block content %}
+<section class="page-heading wrap">
+  <p class="eyebrow">YOUR CART</p>
+  <h1>Ready when you are.</h1>
+</section>
+<div class="wrap cart-layout">
+  <div>
+    {% for product, quantity, price in items %}
+    <div class="cart-item">
+      <img src="{{ product.image_url }}" alt="{{ product.name }}" />
+      <div>
+        <h3>{{ product.name }}</h3>
+        <p>{{ quantity }} × GH₵ {{ product.price|floatformat:2 }}</p>
+      </div>
+      <strong>GH₵ {{ price|floatformat:2 }}</strong
+      ><a href="{% url 'remove_from_cart' product.id %}">Remove</a>
+    </div>
+    {% empty %}
+    <div class="empty">
+      <h3>Your cart is empty</h3>
+      <p>Find something good and bring it here.</p>
+      <a class="button primary" href="{% url 'shop' %}">Browse products</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% if items %}
+  <aside class="summary">
+    <h3>Order summary</h3>
+    <div>
+      <span>Subtotal</span><strong>GH₵ {{ total|floatformat:2 }}</strong>
+    </div>
+    <div><span>Delivery</span><span>Arranged with seller</span></div>
+    <hr />
+    <div class="total">
+      <span>Total</span><strong>GH₵ {{ total|floatformat:2 }}</strong>
+    </div>
+    <a class="button primary full" href="{% url 'checkout' %}">Checkout →</a>
+  </aside>
+  {% endif %}
+</div>
+{% endblock %}

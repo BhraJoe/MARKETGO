@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Browse products | MarketGo{% endblock %}
+{% block content %}
+<section class="shop-head">
+  <div class="shop-head-backdrop" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="eyebrow">THE MARKET</p>
+    <h1>
+      {% if query %}Results for “{{ query }}”{% else %}Find your next thing{% endif %}
+    </h1>
+    <p>Quality products from sellers near you.</p>
+  </div>
+</section>
+<div class="wrap shop-layout">
+  <aside>
+    <strong>Categories</strong>
+    <a href="{% url 'shop' %}">All products</a>
+    {% for category in categories %}
+    <a href="?category={{ category.slug }}">{{ category.name }}</a>
+    {% endfor %}
+  </aside>
+  <section>
+    <div class="toolbar">
+      <span>{{ products|length }} products</span>
+      <form>
+        <input type="hidden" name="q" value="{{ query }}" /><select
+          name="sort"
+          onchange="this.form.submit()"
+        >
+          <option value="-created_at">Newest first</option>
+          <option value="price">Price: low to high</option>
+          <option value="-price">Price: high to low</option>
+          <option value="-views">Most popular</option>
+        </select>
+      </form>
+    </div>
+    <div class="product-grid" id="product-grid">
+      {% include 'marketplace/shop_products.html' %}
+    </div>
+    {% if products.has_next %}
+    <div class="load-more" id="load-more" data-next-page="2" aria-live="polite">
+      <span class="loader" aria-hidden="true"></span>
+      <span>Loading more products</span>
+    </div>
+    {% endif %}
+  </section>
+</div>
+<script>
+  const loadMore = document.getElementById("load-more");
+  const productGrid = document.getElementById("product-grid");
+  if (loadMore) {
+    const loadProducts = async () => {
+      if (loadMore.dataset.loading === "true") return;
+      loadMore.dataset.loading = "true";
+      const params = new URLSearchParams(window.location.search);
+      params.set("page", loadMore.dataset.nextPage);
+      params.set("partial", "1");
+      try {
+        const response = await fetch(`${window.location.pathname}?${params}`);
+        if (!response.ok) throw new Error("Unable to load products");
+        const html = await response.text();
+        productGrid.insertAdjacentHTML("beforeend", html);
+        const nextPage = Number(loadMore.dataset.nextPage) + 1;
+        const nextParams = new URLSearchParams(window.location.search);
+        nextParams.set("page", nextPage);
+        nextParams.set("partial", "1");
+        const nextResponse = await fetch(`${window.location.pathname}?${nextParams}`, { method: "HEAD" });
+        if (nextResponse.ok && nextResponse.headers.get("X-Has-Next") === "true") {
+          loadMore.dataset.nextPage = nextPage;
+        } else {
+          loadMore.remove();
+        }
+      } catch (error) {
+        loadMore.querySelector("span:last-child").textContent = "Could not load more products";
+        loadMore.classList.add("load-error");
+      } finally {
+        loadMore.dataset.loading = "false";
+      }
+    };
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) loadProducts();
+    }, { rootMargin: "500px 0px" }).observe(loadMore);
+  }
+</script>
+{% endblock %}

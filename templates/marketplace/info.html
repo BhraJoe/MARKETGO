@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | MarketGo{% endblock %}
+{% block content %}
+<section class="info-page">
+  <div class="wrap info-intro">
+    <p class="eyebrow">{{ eyebrow }}</p>
+    <h1>{{ title }}</h1>
+    <p>{{ intro }}</p>
+  </div>
+  <div class="wrap info-sections">
+    {% for heading, body in sections %}
+    <article>
+      <span>{{ forloop.counter|stringformat:'02d' }}</span>
+      <div><h2>{{ heading }}</h2><p>{{ body }}</p></div>
+    </article>
+    {% endfor %}
+  </div>
+  {% if contact_form %}
+  <div class="wrap contact-map">
+    <div class="map-copy">
+      <p class="eyebrow">FIND MARKETGO</p>
+      <h2>Rooted in Ghana.</h2>
+      <p>Our marketplace is built around local buying and selling, starting in Accra and growing across the country.</p>
+      <strong>Accra, Greater Accra</strong>
+      <a href="https://www.openstreetmap.org/?mlat=5.6037&amp;mlon=-0.1870#map=13/5.6037/-0.1870" target="_blank" rel="noopener">Open in OpenStreetMap →</a>
+    </div>
+    <div class="map-frame">
+      <iframe
+        title="MarketGo location in Accra"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=-0.245%2C5.555%2C-0.129%2C5.652&amp;layer=mapnik&amp;marker=5.6037%2C-0.1870"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </div>
+  <div class="wrap contact-tools">
+    <form method="post" class="form-card contact-form">
+      {% csrf_token %}
+      <h2>Send us a message</h2>
+      {{ contact_form.as_p }}
+      <button class="button primary" type="submit">Send message →</button>
+    </form>
+    <div class="faq-list">
+      <p class="eyebrow">QUICK ANSWERS</p>
+      <h2>Before you write</h2>
+      {% for question, answer in faqs %}
+      <details><summary>{{ question }}</summary><p>{{ answer }}</p></details>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} | MarketGo{% endblock %}
+{% block content %}
+<div class="wrap detail">
+  <div class="detail-media">
+    <img src="{{ product.image_url }}" alt="{{ product.name }}" />
+  </div>
+  <div class="detail-copy">
+    <p class="eyebrow">{{ product.category.name }} / {{ product.location }}</p>
+    <h1>{{ product.name }}</h1>
+    <div class="big-price">GH₵ {{ product.price|floatformat:2 }}</div>
+    <div class="tags">
+          <span>{{ product.get_condition_display }}</span>
+          {% if product.negotiable %}<span>Price negotiable</span>{% endif %}
+    </div>
+    <p class="description">{{ product.description }}</p>
+    <div class="seller">
+      <div class="avatar">{{ product.seller.username|first|upper }}</div>
+      <div>
+        <strong
+          >Listed by {{
+          product.seller.get_full_name|default:product.seller.username
+          }}</strong
+        ><small
+          >Member since {{ product.seller.date_joined|date:'M Y' }} · {{
+          product.views }} views</small
+        >
+      </div>
+    </div>
+    <div class="detail-actions">
+      <a class="button primary" href="{% url 'add_to_cart' product.id %}"
+        >Add to cart</a
+      ><a class="button outline" href="{% url 'toggle_favorite' product.id %}"
+        >{% if is_favorite %}Saved{% else %}Save listing{% endif %}</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}

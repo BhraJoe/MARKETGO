@@ -1,0 +1,103 @@
+{% load static %}<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}MarketGo | Buy. Sell. Go.{% endblock %}</title>
+    <meta
+      name="description"
+      content="Discover quality products from trusted sellers around Ghana."
+    />
+    <link rel="stylesheet" href="{% static 'css/marketgo.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/sticky-sidebar.css' %}" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav wrap">
+        <a class="brand" href="{% url 'home' %}"
+          ><span class="brand-mark">M</span>market<span>go</span></a
+        >
+        <form class="search" action="{% url 'shop' %}">
+          <input
+            name="q"
+            value="{{ query|default:'' }}"
+            placeholder="Search products, brands, locations"
+            aria-label="Search products"
+          /><button aria-label="Search">Search</button>
+        </form>
+        <nav>
+          <a href="{% url 'shop' %}">Browse</a
+          ><a href="{% url 'create_product' %}" class="sell-link"
+            >Sell something</a
+          ><a href="{% url 'cart' %}" class="cart-link"
+            >Cart <b>{{ cart_count }}</b></a
+          >{% if user.is_authenticated %}<a href="{% url 'orders' %}"
+            >{{ user.username }}</a
+          ><a href="{% url 'logout' %}">Log out</a>{% else %}<a
+            href="{% url 'login' %}"
+            >Log in</a
+            ><a href="{% url 'register' %}">Register</a
+          >{% endif %}
+        </nav>
+      </div>
+    </header>
+    {% if messages %}
+    <div class="messages wrap">
+      {% for message in messages %}
+      <div>{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <main>{% block content %}{% endblock %}</main>
+    <footer>
+      <div class="wrap footer-inner">
+        <div class="footer-brand">
+          <a class="brand" href="{% url 'home' %}"
+            ><span class="brand-mark">M</span>market<span>go</span></a
+          >
+          <p>Buy. Sell. Go.</p>
+          <span>Ghana's marketplace for the things that matter every day.</span>
+        </div>
+        <div class="footer-links">
+          <strong>Shop</strong>
+          <a href="{% url 'shop' %}">All products</a>
+          <a href="{% url 'shop' %}?sort=-created_at">New arrivals</a>
+          <a href="{% url 'shop' %}?sort=-views">Popular products</a>
+          <a href="{% url 'cart' %}">Your cart</a>
+        </div>
+        <div class="footer-links">
+          <strong>Sell</strong>
+          <a href="{% url 'create_product' %}">Sell something</a>
+          <a href="{% url 'register' %}">Create an account</a>
+          <a href="{% url 'login' %}">Seller login</a>
+          <a href="{% url 'orders' %}">Track orders</a>
+        </div>
+        <div class="footer-links">
+          <strong>Help & support</strong>
+          <a href="{% url 'contact' %}">Contact us</a>
+          <a href="{% url 'contact' %}">Report a listing</a>
+          <a href="{% url 'safety' %}">Safety tips</a>
+          <a href="{% url 'policies' %}">Terms & privacy</a>
+        </div>
+        <div class="footer-links footer-note">
+          <strong>Built for Ghana</strong>
+          <span>Prices in GH₵</span>
+          <span>Local sellers, real products</span>
+          <span>Accra · Kumasi · Takoradi · Tema</span>
+        </div>
+      </div>
+      <div class="wrap footer-bottom">
+        <span>© 2026 MarketGo. All rights reserved.</span>
+        <span>Secure browsing · Local commerce · Ghana</span>
+      </div>
+    </footer>
+    <button id="top" aria-label="Scroll to top">↑</button>
+    <script>
+      const topButton = document.getElementById("top");
+      addEventListener("scroll", () =>
+        topButton.classList.toggle("show", scrollY > 300),
+      );
+      topButton.onclick = () => scrollTo({ top: 0, behavior: "smooth" });
+    </script>
+  </body>
+</html>

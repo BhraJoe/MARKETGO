@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Sell something | MarketGo{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-intro">
+    <p class="eyebrow">SELL ON MARKETGO</p>
+    <h1>Put it in the hands of someone who needs it.</h1>
+    <p>
+      Tell buyers what makes your product worth their attention. Clear details
+      build trust.
+    </p>
+  </div>
+  <form method="post" class="form-card">
+    {% csrf_token %}{{ form.as_p }}<button class="button primary" type="submit">
+      Publish listing →
+    </button>
+  </form>
+</section>
+{% endblock %}

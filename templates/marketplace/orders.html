@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Your orders | MarketGo{% endblock %}
+{% block content %}
+<section class="page-heading wrap">
+  <p class="eyebrow">ACCOUNT</p>
+  <h1>Your orders</h1>
+</section>
+<div class="wrap orders">
+  {% for order in orders %}
+  <article>
+    <div>
+      <span class="order-number">ORDER #{{ order.id }}</span>
+      <h3>GH₵ {{ order.total|floatformat:2 }}</h3>
+      <small>{{ order.created_at|date:'j M Y' }}</small>
+    </div>
+    <span class="status">{{ order.get_status_display }}</span>
+  </article>
+  {% empty %}
+  <div class="empty">
+    <h3>No orders yet</h3>
+    <p>When you buy something, it will appear here.</p>
+    <a class="button primary" href="{% url 'shop' %}">Start shopping</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

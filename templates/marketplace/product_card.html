@@ -1,0 +1,24 @@
+<article class="product-card">
+  <a href="{{ product.get_absolute_url }}" class="product-image"
+    ><img
+      src="{{ product.image_url }}"
+      alt="{{ product.name }}"
+      loading="lazy"
+    /><span class="condition">{{ product.get_condition_display }}</span></a
+  >
+  <div class="product-info">
+    <div class="product-meta">
+      <span>{{ product.category.name }}</span
+      ><span>{{ product.location }}</span>
+    </div>
+    <h3><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+    <div class="card-bottom">
+      <strong>GH₵ {{ product.price|floatformat:2 }}</strong
+      ><a
+        href="{% url 'toggle_favorite' product.id %}"
+        aria-label="Save {{ product.name }}"
+        >♡</a
+      >
+    </div>
+  </div>
+</article>

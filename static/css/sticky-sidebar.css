@@ -1,0 +1,18 @@
+.shop-layout aside {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+@media (max-width: 800px) {
+  .shop-layout aside {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 16px;
+  }
+}

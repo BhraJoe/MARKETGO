@@ -1,0 +1,173 @@
+{% extends 'base.html' %}{% block content %}
+<section class="hero">
+  <div class="hero-backdrop" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">YOUR LOCAL MARKETPLACE</p>
+      <h1>Buy what you need.<br /><em>Sell what you have.</em></h1>
+      <p class="hero-copy">
+        A better way to find great products from sellers around you. Simple,
+        trusted, and made for everyday life in Ghana.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="{% url 'shop' %}"
+          >Start shopping <span>→</span></a
+        ><a class="button ghost" href="{% url 'create_product' %}"
+          >Sell something</a
+        >
+      </div>
+    </div>
+    <div class="hero-note">
+      <div class="hero-stat">
+        <strong>Real people.</strong><span>Real products.</span>
+      </div>
+      <div class="hero-rule"></div>
+      <p>Discover pre-loved gems, new essentials, and everything in between.</p>
+    </div>
+  </div>
+</section>
+<script>
+  const heroImages = [
+    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=85",
+    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1800&q=85",
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=85",
+    "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1800&q=85",
+    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1800&q=85",
+  ];
+  const heroBackdrop = document.querySelector(".hero-backdrop");
+  let heroImageIndex = 0;
+  heroBackdrop.style.backgroundImage = `url("${heroImages[heroImageIndex]}")`;
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    setInterval(() => {
+      heroImageIndex = (heroImageIndex + 1) % heroImages.length;
+      heroBackdrop.classList.add("is-changing");
+      setTimeout(() => {
+        heroBackdrop.style.backgroundImage = `url("${heroImages[heroImageIndex]}")`;
+        heroBackdrop.classList.remove("is-changing");
+      }, 450);
+    }, 5000);
+  }
+</script>
+<section class="market-stats">
+  <div class="wrap stats-grid">
+    <div><strong>{{ product_count }}</strong><span>Products listed</span></div>
+    <div><strong>{{ seller_count }}</strong><span>Local sellers</span></div>
+    <div><strong>{{ category_count }}</strong><span>Ways to browse</span></div>
+    <div><strong>GH₵</strong><span>Local currency</span></div>
+  </div>
+</section>
+<section class="trust-strip">
+  <div class="wrap trust-grid">
+    <div>
+      <span class="trust-icon">01</span>
+      <div><strong>Shop with clarity</strong><small>Clear prices, conditions, and locations on every listing.</small></div>
+    </div>
+    <div>
+      <span class="trust-icon">02</span>
+      <div><strong>Buy from nearby</strong><small>Find products from sellers across Ghana.</small></div>
+    </div>
+    <div>
+      <span class="trust-icon">03</span>
+      <div><strong>Sell in minutes</strong><small>Publish your listing and reach people who need it.</small></div>
+    </div>
+  </div>
+</section>
+<section class="section how-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">SIMPLE BY DESIGN</p>
+        <h2>How MarketGo works</h2>
+      </div>
+    </div>
+    <div class="how-grid">
+      <article><span>01</span><h3>Find something good</h3><p>Search the market, browse a category, or explore sellers near you.</p></article>
+      <article><span>02</span><h3>Ask the right questions</h3><p>Review the details, check the condition, and connect with the seller.</p></article>
+      <article><span>03</span><h3>Buy or sell locally</h3><p>Agree on the details and arrange a convenient handover together.</p></article>
+    </div>
+  </div>
+</section>
+<section class="section wrap">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">EXPLORE</p>
+      <h2>Shop by category</h2>
+    </div>
+    <a href="{% url 'shop' %}">View all →</a>
+  </div>
+  <div class="category-grid">
+    {% for category in categories %}<a
+      href="{% url 'shop' %}?category={{ category.slug }}"
+      ><span>{{ category.icon }}</span><strong>{{ category.name }}</strong
+      ><small>Browse products</small></a
+    >{% empty %}
+    <p class="muted">Categories are being prepared.</p>
+    {% endfor %}
+  </div>
+</section>
+<section class="section location-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">SHOP NEARBY</p>
+        <h2>Explore local markets</h2>
+      </div>
+      <a href="{% url 'shop' %}">See all listings →</a>
+    </div>
+    <div class="location-grid">
+      <a href="{% url 'shop' %}?q=Accra"><strong>Accra</strong><span>Greater Accra</span><b>→</b></a>
+      <a href="{% url 'shop' %}?q=Kumasi"><strong>Kumasi</strong><span>Ashanti Region</span><b>→</b></a>
+      <a href="{% url 'shop' %}?q=Takoradi"><strong>Takoradi</strong><span>Western Region</span><b>→</b></a>
+      <a href="{% url 'shop' %}?q=Tema"><strong>Tema</strong><span>Greater Accra</span><b>→</b></a>
+    </div>
+  </div>
+</section>
+<section class="section tinted">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">HANDPICKED</p>
+        <h2>Featured finds</h2>
+      </div>
+      <a href="{% url 'shop' %}">See the market →</a>
+    </div>
+    <div class="product-grid">
+      {% for product in featured %}
+      {% include 'marketplace/product_card.html' %}
+      {% empty %}
+      <div class="empty">
+        <h3>Your next great find starts here.</h3>
+        <p>Be the first to list a product in the marketplace.</p>
+        <a class="button primary" href="{% url 'create_product' %}"
+          >List a product</a
+        >
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="seller-banner">
+  <div class="wrap seller-banner-inner">
+    <div>
+      <p class="eyebrow">HAVE SOMETHING TO SELL?</p>
+      <h2>Turn unused into useful.</h2>
+      <p>List your product, set your price, and connect with a buyer nearby.</p>
+    </div>
+    <a class="button primary" href="{% url 'create_product' %}">Start selling <span>→</span></a>
+  </div>
+</section>
+<section class="section wrap">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">JUST IN</p>
+      <h2>Recently added</h2>
+    </div>
+    <a href="{% url 'shop' %}">Browse all →</a>
+  </div>
+  <div class="product-grid">
+    {% for product in latest %}
+    {% include 'marketplace/product_card.html' %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

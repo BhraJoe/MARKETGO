@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "python manage.py migrate --noinput && python manage.py collectstatic --noinput",
   "builds": [
     {
       "src": "api/index.py",
@@ -7,21 +8,11 @@
       "config": {
         "maxLambdaSize": "15mb"
       }
-    },
-    {
-      "src": "static/**",
-      "use": "@vercel/static"
     }
   ],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "api/index.py"
-    }
-  ],
+  "routes": [{
+    "src": "/(.*)",
+    "dest": "api/index.py"
+  }],
   "trailingSlash": false
 }

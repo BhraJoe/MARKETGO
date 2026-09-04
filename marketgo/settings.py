@@ -1,4 +1,5 @@
 import os
+import tempfile
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -31,7 +32,8 @@ TEMPLATES = [{
     ]},
 }]
 WSGI_APPLICATION = 'marketgo.wsgi.application'
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
+DATABASE_PATH = Path(tempfile.gettempdir()) / 'marketgo.sqlite3' if os.getenv('VERCEL') else BASE_DIR / 'db.sqlite3'
+DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': DATABASE_PATH}}
 AUTH_PASSWORD_VALIDATORS = [{'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'}, {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'}]
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Accra'
